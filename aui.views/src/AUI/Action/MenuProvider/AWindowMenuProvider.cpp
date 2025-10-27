@@ -142,23 +142,35 @@ class AMenuContainer : public AViewContainerBase {
     }
 };
 
-void AWindowMenuProvider::createMenu(const AVector<AMenuItem>& vector, const glm::ivec2& mousePosition) {
+void AWindowMenuProvider::createMenu(const AVector<AMenuItem>& vector) {
     closeMenu();
     mWindow = AWindow::current();
-    
-    ALogger::info("ContextMenu") << "Using provided mouse position: " << mousePosition;
-    ALogger::info("ContextMenu") << "getMousePos(): " << mWindow->getMousePos();
-    
-    auto menu = _new<AMenuContainer>(vector, mousePosition);
-    auto menuSize = menu->getMinimumSize();
-    ALogger::info("ContextMenu") << "Menu size: " << menuSize;
-    
-    auto surfaceContainer = mWindow->createOverlappingSurface(mousePosition, menuSize);
+    auto mousePos = mWindow->getMousePos();
+    auto menu = _new<AMenuContainer>(vector, mousePos);
+    auto surfaceContainer = mWindow->createOverlappingSurface(mousePos, menu->getMinimumSize());
     surfaceContainer->setLayout(std::make_unique<AStackedLayout>());
     surfaceContainer->addView(menu);
     menu->setSurface(surfaceContainer);
     mMenuContainer = menu;
 }
+
+// void AWindowMenuProvider::createMenu(const AVector<AMenuItem>& vector, const glm::ivec2& mousePosition) {
+//     closeMenu();
+//     mWindow = AWindow::current();
+    
+//     ALogger::info("ContextMenu") << "Using provided mouse position: " << mousePosition;
+//     ALogger::info("ContextMenu") << "getMousePos(): " << mWindow->getMousePos();
+    
+//     auto menu = _new<AMenuContainer>(vector, mousePosition);
+//     auto menuSize = menu->getMinimumSize();
+//     ALogger::info("ContextMenu") << "Menu size: " << menuSize;
+    
+//     auto surfaceContainer = mWindow->createOverlappingSurface(mousePosition, menuSize);
+//     surfaceContainer->setLayout(std::make_unique<AStackedLayout>());
+//     surfaceContainer->addView(menu);
+//     menu->setSurface(surfaceContainer);
+//     mMenuContainer = menu;
+// }
 
 void AWindowMenuProvider::closeMenu() {
     if (auto s = mMenuContainer.lock()) {

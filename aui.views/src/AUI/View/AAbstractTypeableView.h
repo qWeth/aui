@@ -139,8 +139,8 @@ public:
     }
 
 protected:
-    AMenuModel composeContextMenu(const glm::ivec2& mousePosition = {0, 0}) override {
-        return composeContextMenuImpl(mousePosition);
+    AMenuModel composeContextMenu() override {
+        return composeContextMenuImpl();
     }
 
     void commitStyle() override {

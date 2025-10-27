@@ -27,7 +27,7 @@ private:
     _<MenuContainer> mWindow;
 
 public:
-    void createMenu(const AVector<AMenuItem>& vector, const glm::ivec2& mousePosition = {0, 0}) override;
+    void createMenu(const AVector<AMenuItem>& vector) override;
 
     bool isOpen() override;
 

@@ -18,8 +18,8 @@
 #include <AUI/Action/MenuProvider/AEmbedMenuProvider.h>
 #include "AMenu.h"
 
-void AMenu::show(const AMenuModel& model, const glm::ivec2& mousePosition) {
-    provider()->createMenu(model, mousePosition);
+void AMenu::show(const AMenuModel& model) {
+    provider()->createMenu(model);
 }
 
 _<IMenuProvider>& AMenu::provider() {

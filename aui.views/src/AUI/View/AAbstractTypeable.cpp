@@ -281,7 +281,7 @@ void AAbstractTypeable::enterChar(AChar c)
     cursorSelectableRedraw();
 }
 
-AMenuModel AAbstractTypeable::composeContextMenuImpl(const glm::ivec2& mousePosition) {
+AMenuModel AAbstractTypeable::composeContextMenuImpl() {
     return { { .name = "aui.cut"_i18n, .shortcut = AInput::LCONTROL + AInput::X, .onAction = [&]{cutToClipboard();}, .enabled = hasSelection(), },
              { .name = "aui.copy"_i18n, .shortcut = AInput::LCONTROL + AInput::C, .onAction = [&]{copyToClipboard();}, .enabled = hasSelection() },
              { .name = "aui.paste"_i18n, .shortcut = AInput::LCONTROL + AInput::V, .onAction = [&]{pasteFromClipboard();}, .enabled = !AClipboard::isEmpty() },

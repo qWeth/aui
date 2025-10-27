@@ -193,7 +193,7 @@ protected:
      */
     void enterChar(AChar c);
 
-    AMenuModel composeContextMenuImpl(const glm::ivec2& mousePosition = {0, 0});
+    AMenuModel composeContextMenuImpl();
     void handleKey(AInput::Key key);
 
 private:

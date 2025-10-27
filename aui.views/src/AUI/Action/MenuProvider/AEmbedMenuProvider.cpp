@@ -19,6 +19,7 @@
 #include <AUI/View/ALabel.h>
 #include <AUI/Platform/ADesktop.h>
 #include <AUI/Util/UIBuildingHelpers.h>
+#include "AUI/Platform/AWindow.h"
 #include "AEmbedMenuProvider.h"
 using namespace declarative;
 
@@ -106,12 +107,19 @@ public:
 
 };
 
+void AEmbedMenuProvider::createMenu(const AVector<AMenuItem>& vector) {
+    closeMenu();
+    auto mousePos = AWindow::current()->getMousePos();
+    mWindow->setGeometry(mousePos.x, mousePos.y, mWindow->getMinimumWidth(), mWindow->getMinimumHeight());
+}
+/*
+
 void AEmbedMenuProvider::createMenu(const AVector<AMenuItem>& vector, const glm::ivec2& mousePosition) {
     closeMenu();
     mWindow = _new<MenuContainer>(AWindow::current(), vector);
     mWindow->setGeometry(mousePosition.x, mousePosition.y, mWindow->getMinimumWidth(), mWindow->getMinimumHeight());
 }
-
+*/
 void AEmbedMenuProvider::closeMenu() {
     if (isOpen()) {
         mWindow->close();
