@@ -30,7 +30,7 @@ class API_AUI_VIEWS AMenu {
 private:
     static _<IMenuProvider>& provider();
 public:
-    static void show(const AMenuModel& model);
+    static void show(const AMenuModel& model, const glm::ivec2& mousePosition = {0, 0});
     static void close();
     static bool isOpen();
 

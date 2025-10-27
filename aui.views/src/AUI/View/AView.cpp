@@ -397,9 +397,9 @@ void AView::onPointerReleased(const APointerReleasedEvent& event)
                     emit clickedRight;
                     emit clickedRightOrLongPressed;
 
-                    auto menuModel = composeContextMenu();
+                    auto menuModel = composeContextMenu(event.position);
                     if (!menuModel.empty()) {
-                        AMenu::show(menuModel);
+                        AMenu::show(menuModel, event.position);
                     }
 
                     break;
@@ -412,7 +412,7 @@ void AView::onPointerReleased(const APointerReleasedEvent& event)
     }
 }
 
-AMenuModel AView::composeContextMenu() {
+AMenuModel AView::composeContextMenu(const glm::ivec2& mousePosition) {
     return {};
 }
 
@@ -624,14 +624,14 @@ bool AView::onGesture(const glm::ivec2& origin, const AGestureEvent& event) {
 bool AView::transformGestureEventsToDesktop(const glm::ivec2& origin, const AGestureEvent& event) {
     return std::visit(aui::lambda_overloaded {
         [&](const ALongPressEvent& e) {
-            auto menuModel = composeContextMenu();
+            auto menuModel = composeContextMenu(origin);
             bool result = false;
             if (clickedRightOrLongPressed) {
                 emit clickedRightOrLongPressed;
                 result = true;
             }
             if (!menuModel.empty()) {
-                AMenu::show(menuModel);
+                AMenu::show(menuModel, origin);
                 result = true;
             }
             return result;

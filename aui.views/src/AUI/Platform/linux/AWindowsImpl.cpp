@@ -109,7 +109,10 @@ glm::ivec2 AWindow::mapPosition(const glm::ivec2& position) {
     return position - getWindowPosition();
 }
 glm::ivec2 AWindow::unmapPosition(const glm::ivec2& position) {
-    return position + getWindowPosition();
+    auto windowPos = getWindowPosition();
+    auto result = position + windowPos;
+    ALogger::info("unmapPosition") << "Input: " << position << ", Window: " << windowPos << ", Result: " << result;
+    return result;
 }
 
 

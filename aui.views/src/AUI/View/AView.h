@@ -1128,9 +1128,10 @@ protected:
 
     /**
      * @brief Produce context (right click) menu.
+     * @param mousePosition position of the mouse when the context menu was triggered
      * @return menu model
      */
-    virtual AMenuModel composeContextMenu();
+    virtual AMenuModel composeContextMenu(const glm::ivec2& mousePosition = {0, 0});
 
     /**
      * @brief Called when direct or indirect parent has changed.

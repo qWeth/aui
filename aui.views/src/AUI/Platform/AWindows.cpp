@@ -15,6 +15,7 @@
 #include "AUI/Performance/APerformanceFrame.h"
 #include "AUI/Performance/APerformanceSection.h"
 #include "AUI/Platform/AWindow.h"
+#include "AUI/Platform/ADesktop.h"
 #include "AUI/Thread/AThread.h"
 #include "SoftwareRenderingContext.h"
 #include "ARenderingContextOptions.h"
@@ -258,7 +259,9 @@ _<AOverlappingSurface> AWindow::createOverlappingSurfaceImpl(const glm::ivec2& p
         }
     };
     auto window = _new<AOverlappingWindow>(this);
+    // Use unmapPosition to convert window coordinates to screen coordinates
     auto finalPos = unmapPosition(position);
+    ALogger::info("createOverlappingSurfaceImpl") << "Input: " << position << ", Final: " << finalPos << ", Size: " << size;
     window->setGeometry(finalPos.x, finalPos.y, size.x, size.y);
     // show later
     AUI_UI_THREAD {

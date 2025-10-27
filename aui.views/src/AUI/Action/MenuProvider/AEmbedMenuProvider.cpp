@@ -106,11 +106,10 @@ public:
 
 };
 
-void AEmbedMenuProvider::createMenu(const AVector<AMenuItem>& vector) {
+void AEmbedMenuProvider::createMenu(const AVector<AMenuItem>& vector, const glm::ivec2& mousePosition) {
     closeMenu();
     mWindow = _new<MenuContainer>(AWindow::current(), vector);
-    auto mousePos = AWindow::current()->getMousePos();
-    mWindow->setGeometry(mousePos.x, mousePos.y, mWindow->getMinimumWidth(), mWindow->getMinimumHeight());
+    mWindow->setGeometry(mousePosition.x, mousePosition.y, mWindow->getMinimumWidth(), mWindow->getMinimumHeight());
 }
 
 void AEmbedMenuProvider::closeMenu() {

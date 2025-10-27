@@ -29,7 +29,7 @@ private:
     _weak<AMenuContainer> mMenuContainer;
 
 public:
-    void createMenu(const AVector<AMenuItem>& vector) override;
+    void createMenu(const AVector<AMenuItem>& vector, const glm::ivec2& mousePosition = {0, 0}) override;
 
     bool isOpen() override;
 

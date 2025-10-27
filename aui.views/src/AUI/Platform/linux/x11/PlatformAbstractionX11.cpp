@@ -444,7 +444,10 @@ glm::ivec2 PlatformAbstractionX11::windowGetPosition(AWindow& window) const {
 void PlatformAbstractionX11::windowFlagRedraw(AWindow& window) { redrawFlag(window) = true; }
 void PlatformAbstractionX11::windowShow(AWindow& window) {
     if (bool(PlatformAbstractionX11::ourDisplay) && nativeHandle(window)) {
-        AThread::current() << [&]() { XMapWindow(PlatformAbstractionX11::ourDisplay, nativeHandle(window)); };
+        AThread::current() << [&]() { 
+            // Use XMapRaised for popup windows to ensure proper stacking
+            XMapRaised(PlatformAbstractionX11::ourDisplay, nativeHandle(window));
+        };
     }
 }
 
@@ -484,8 +487,39 @@ void PlatformAbstractionX11::windowSetSize(AWindow& window, glm::ivec2 size) {
 void PlatformAbstractionX11::windowSetGeometry(AWindow& window, int x, int y, int width, int height) {
     if (!nativeHandle(window))
         return;
-    XMoveWindow(PlatformAbstractionX11::ourDisplay, nativeHandle(window), x, y);
-    XResizeWindow(PlatformAbstractionX11::ourDisplay, nativeHandle(window), width, height);
+    
+    ALogger::info("windowSetGeometry") << "Setting geometry: x=" << x << ", y=" << y << ", w=" << width << ", h=" << height;
+    
+    // Set window type as popup menu for proper positioning
+    Atom windowType = XInternAtom(PlatformAbstractionX11::ourDisplay, "_NET_WM_WINDOW_TYPE", False);
+    Atom popupType = XInternAtom(PlatformAbstractionX11::ourDisplay, "_NET_WM_WINDOW_TYPE_POPUP_MENU", False);
+    
+    if (windowType != None && popupType != None) {
+        XChangeProperty(PlatformAbstractionX11::ourDisplay, nativeHandle(window), windowType, XA_ATOM, 32, 
+                       PropModeReplace, (unsigned char*)&popupType, 1);
+    }
+    
+    // Set window position hints
+    XSizeHints* sizehints = XAllocSizeHints();
+    sizehints->flags = PPosition | PSize;
+    sizehints->x = x;
+    sizehints->y = y;
+    sizehints->width = width;
+    sizehints->height = height;
+    
+    XSetWMNormalHints(PlatformAbstractionX11::ourDisplay, nativeHandle(window), sizehints);
+    XFree(sizehints);
+    
+    // Use XConfigureWindow for better positioning
+    XWindowChanges changes;
+    changes.x = x;
+    changes.y = y;
+    changes.width = width;
+    changes.height = height;
+    
+    XConfigureWindow(PlatformAbstractionX11::ourDisplay, nativeHandle(window), 
+                     CWX | CWY | CWWidth | CWHeight, &changes);
+    XFlush(PlatformAbstractionX11::ourDisplay);
 }
 
 void PlatformAbstractionX11::windowSetIcon(AWindow& window, const AImage& image) {}
